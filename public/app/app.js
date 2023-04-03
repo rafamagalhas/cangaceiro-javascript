@@ -1,12 +1,17 @@
 import { handleStatus } from "./utils/promise-helpers.js";
 
+const sumItems = (notas) =>
+  notas
+    .flatMap((nota) => nota.itens)
+    .filter((item) => item.codigo == "2143")
+    .reduce((total, item) => total + item.valor, 0);
+
+
 document
 .querySelector('#myButton')
 .onclick = () =>
   fetch('http://localhost:3000/notas')
     .then(handleStatus)
-    .then(notas => notas.reduce((array, nota) => array.concat(nota.itens), []))
-    .then(itens => itens.filter(item => item.codigo == '2143'))
-    .then(itens => itens.reduce((total, item) => total + item.valor, 0))
+    .then(sumItems)
     .then(console.log)
     .catch(console.log);
